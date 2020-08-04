@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link rel="stylesheet" href="./styles/site.css" >
+    <title>Blue Monkey</title>
+  </head>
+  <body>
+    <header>
+      <nav class="navbar navbar-expand-lg navbar-default" style="background-color: #e3f2fd;">
+        <img src="images/blue-monkey-logo.svg" width="64px"></img>
+        <a class="navbar-brand" href="index.html" style="padding-left:10px;">Blue Monkey</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+      
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+              <a class="nav-link" href="index.html">Home<span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item active">
+              <a class="nav-link" href="reader.html">Reader<span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item active">
+              <a class="nav-link" href="about.html">About<span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item active">
+              <a class="nav-link" href="contact.html">Contact<span class="sr-only">(current)</span></a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+    </header>
+
+    <main role="main" class="container">
+      <div class="row">
+      </div>
+        <h1>WaniKani Reader</h1>
+      </div>
+      
+      <div class="row" style="padding-top:20px;">
+        <div class="card" style="width: 75%;">
+          <div class="card-body">
+            <form>
+              <div class="row">
+                <div class="col">
+                  <label for="fontSizeDropdown">Font Size</label>
+                </div>
+                <div class="col">
+                  <select id="fontSizeDropdown">
+                    <option value="xx-small">xx-small</option>
+                    <option value="x-small">x-small</option>
+                    <option value="small">small</option>
+                    <option value="medium" selected>medium</option>
+                    <option value="large">large</option>
+                    <option value="x-large">x-large</option>
+                    <option value="xx-large">xx-large</option>
+                  </select>
+                </div>
+                <div class="col-lg-3">
+                  <label for="oneContextSentenceCheckbox">One Sentence Per Vocab</label>
+                </div>
+                <div class="col">
+                  <input type="checkbox" id="oneContextSentenceCheckbox"></input>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col">
+                  <label for="numOfSentencesPerParagraphTextBox">Paragraph Size</label>
+                </div>
+                <div class="col">
+                  <input type="number" id="numOfSentencesPerParagraphTextBox" min="1" max="20" value="10" class="form-control"></input>
+                </div>
+                <div class="col">
+                  <label for="shuffleCheckbox">Shuffle Sentences</label>
+                </div>
+                <div class="col">
+                  <input type="checkbox" id="shuffleCheckbox"></input>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col">
+                  <label for="beginLevelTextBox">Starting Level</label>
+                </div>
+                <div class="col">
+                  <input type="number" id="beginLevelTextBox" min="1" max="60" value="1" class="form-control"></input>
+                </div>
+                <div class="col">
+                  <label for="highlightVocabCheckbox">Highlight Vocab</label>
+                </div>
+                <div class="col">
+                  <input type="checkbox" id="highlightVocabCheckbox"></input>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col">
+                  <label for="endLevelTextBox">Ending Level</label>
+                </div>
+                <div class="col">
+                  <input type="number" id="endLevelTextBox" min="1" max="60" value="1" class="form-control"></input> 
+                </div>
+                <div class="col"></div>
+                <div class="col"></div>
+              </div>
+              <div class="row">
+                <div class="col text-center" style="padding-top:10px;">
+                  <input type="button" value="Go!" onclick="load()" class="btn btn-primary"></input>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div id="mainContent" class="main-content" style="float:right;"></div>
+      </div>
+
+      <div class="row text-center text-muted">
+        WaniKani Reader v1.0
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <span class="text-muted">
+            <div>
+              Icons made by <a href="https://www.flaticon.com/authors/smashicons" title="Smashicons">Smashicons</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>
+            </div>
+          </span>
+      </div>
+    </footer>
+
+    <script src="./scripts/reader.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+
+  </body>
+</html>
