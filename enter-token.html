@@ -19,13 +19,16 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
-              <a class="nav-link" href="index.html">Home <span class="sr-only">(current)</span></a>
+              <a class="nav-link" href="index.html">Home<span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item active">
-              <a class="nav-link" href="reader.html">Reader <span class="sr-only">(current)</span></a>
+              <a class="nav-link" href="reader.html">Reader<span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item active">
-              <a class="nav-link" href="version-history.html">Version History <span class="sr-only">(current)</span></a>
+              <a class="nav-link" href="about.html">About<span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item active">
+              <a class="nav-link" href="contact.html">Contact<span class="sr-only">(current)</span></a>
             </li>
           </ul>
         </div>
@@ -33,12 +36,13 @@
     </header>
 
     <main role="main" class="container">
-        <h1>Version History</h1>
-        <h2>Wani Kani Reader</h2>
-        <h3>Version 1.0</h3>
-        <ul>
-          <li>Initial.</li>
-        </ul>
+        <h1>Enter Your WaniKani User Token</h1>
+        We currently don't have your WaniKani User Token stored for retrieving information from them.
+        Please paste your token below.
+        <form>
+          <input type="text" id="tokenTextBox" class="form-control"></input>
+          <input type="button" value="Continue" onclick="storeToken()" class="btn btn-primary"></input>
+        </form>
     </main>
 
     <footer class="footer">
@@ -51,10 +55,6 @@
       </div>
     </footer>
 
-    <script src="./scripts/reader.js"></script>
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
-
+    <script src="./scripts/token.js"></script>
   </body>
 </html>

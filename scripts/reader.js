@@ -1,4 +1,4 @@
-function load() {
+async function processFilters() {
   // ===========================
   // input variables
   // ===========================
@@ -14,32 +14,121 @@ function load() {
   // let shouldContextSentenceBeRandom = true;
   // ===========================
 
-  let levelsToInclude = getLevels(startLevel, endLevel);
+  let apiToken = getApiToken();
+  let userData = await getUserData(apiToken);
+  // let maxUserLevel = userData.subscription.max_level_granted;
+  let maxUserLevel = userData.level;
+  let vocabularyData = await getVocabularyData(apiToken, maxUserLevel);
 
-  var apiToken = 'c2e9ef1e-07aa-4e01-877e-8c349d8364ca';
-  var apiEndpointPath = 'subjects?types=vocabulary&levels=' + levelsToInclude;
+  let sentences = getSentences(vocabularyData, includeOnlyOneContextSentence, startLevel, endLevel);
 
-  var requestHeaders =
+  adjustLevelFiltersIfNeeded(startLevel, endLevel, maxUserLevel);
+
+  displaySentencesOnPage(sentences,
+                         shuffle, 
+                         highlightVocab, 
+                         numberOfSentencesPerParagraph, 
+                         fontSize);
+}
+
+function adjustLevelFiltersIfNeeded(startLevel, endLevel, maxLevel) {
+  if (startLevel > maxLevel) {
+    document.getElementById("beginLevelTextBox").value = maxLevel;
+  }
+
+  if (endLevel > maxLevel) {
+    document.getElementById("endLevelTextBox").value = maxLevel;
+  }
+}
+
+function getApiToken() {
+  // TODO: Update this for local storage.
+  return 'c2e9ef1e-07aa-4e01-877e-8c349d8364ca';
+}
+
+async function getUserData(apiToken, startPage = 1) {
+  let localStorageKey = "WaniKaniUserData";
+  let requestHeaders =
       new Headers({
         'Wanikani-Revision': '20170710',
         Authorization: 'Bearer ' + apiToken,
       });
 
-  var apiEndpoint =
-      new Request('https://api.wanikani.com/v2/' + apiEndpointPath, {
+
+  if (!sessionStorage.getItem(localStorageKey)) {
+    //TODO: Use paging to get all available data if not all comes back the first time.
+    let apiEndpoint =
+        new Request('https://api.wanikani.com/v2/user', {
+          method: 'GET',
+          headers: requestHeaders
+        });
+
+    return fetch(apiEndpoint)
+      .then(response => response.json())
+      .then(responseBody => {
+        sessionStorage.setItem(localStorageKey, JSON.stringify(responseBody.data));
+        return responseBody.data;
+      });
+  } else {
+    return Promise.resolve(JSON.parse(sessionStorage.getItem(localStorageKey)));
+  }
+}
+
+async function getVocabularyData(apiToken, endLevel) {
+  let localStorageKey = "WaniKaniVocab";
+
+  if (!localStorage.getItem(localStorageKey)) {
+    let levelsToInclude = getLevels(endLevel);
+    let apiEndpointPath = 'subjects?types=vocabulary&levels=' + levelsToInclude;
+    let keepLooping = true;
+    let vocabItems = [];
+    let requestHeaders =
+        new Headers({
+          'Wanikani-Revision': '20170710',
+          Authorization: 'Bearer ' + apiToken,
+        });
+
+    let url = "https://api.wanikani.com/v2/" + apiEndpointPath;
+
+    while (keepLooping) {
+      let apiEndpoint = new Request( url, {
         method: 'GET',
         headers: requestHeaders
       });
 
-  fetch(apiEndpoint)
-    .then(response => response.json())
-    .then(responseBody => displaySentencesOnPage(responseBody.data, shuffle, includeOnlyOneContextSentence, highlightVocab, numberOfSentencesPerParagraph, fontSize));
+      let response = await fetch(apiEndpoint)
+        .then(response => response.json())
+        .then(responseBody => {
+          return responseBody;
+      });
+
+      response.data.forEach(item => {
+        var vocabItem = {};
+
+        vocabItem.level = item.data.level;
+        vocabItem.characters = item.data.characters;
+        vocabItem.context_sentences = item.data.context_sentences;
+
+        vocabItems.push(vocabItem);
+      });
+
+      if (response.pages.next_url) {
+        url = response.pages.next_url;
+      } else {
+        keepLooping = false;
+      }
+    }
+
+    localStorage.setItem(localStorageKey, JSON.stringify(vocabItems));
+    return Promise.resolve(vocabItems);
+  } else {
+    return Promise.resolve(JSON.parse(localStorage.getItem(localStorageKey)));
+  }
 }
 
-function displaySentencesOnPage(responseJson, shouldShuffle, onlyOneContextSentence, highlightVocab, numberOfSentencesPerParagraph, fontSize){
+function displaySentencesOnPage(sentences, shouldShuffle, highlightVocab, numberOfSentencesPerParagraph, fontSize){
   document.getElementById("mainContent").innerHTML = ""
   
-  let sentences = getSentences(responseJson, onlyOneContextSentence);
   let formattedSentences = getSentencesForDisplay(sentences, highlightVocab);
   let sentencesToIterate = shouldShuffle ? shuffleArray(formattedSentences) : formattedSentences;
 
@@ -61,7 +150,6 @@ function displaySentencesOnPage(responseJson, shouldShuffle, onlyOneContextSente
     }
   });
 
-  //document.getElementById("text").innerHTML = responseJson.data[0].data.context_sentences[1].ja;
   mainDiv.style.fontSize = fontSize;
 }
 
@@ -72,14 +160,19 @@ function getSentenceWithVocabHighlighted(vocabWord, sentence){
   return formattedSentence;
 }
 
-function getSentences(vocabItems, shouldOnlyIncludeOneSentence) {
+function getSentences(vocabItems, shouldOnlyIncludeOneSentence, startLevel, endLevel) {
   let sentences = [];
 
   vocabItems.forEach(vocabItem => {
-    let sentenceData = vocabItem.data.context_sentences;
+    let vocabLevel = vocabItem.level;
+    if(vocabLevel < startLevel || vocabLevel > endLevel) {
+      return;
+    }
+
+    let sentenceData = vocabItem.context_sentences;
 
     for (let i=0; i<sentenceData.length; i++) {
-      let vocabWord = vocabItem.data.characters;
+      let vocabWord = vocabItem.characters;
       let japaneseSentence = sentenceData[i].ja;
       let englishSentence = sentenceData[i].en;
 
@@ -102,7 +195,6 @@ function getSentencesForDisplay(sentences, highlightVocab) {
   return formattedSentences;
 }
 
-/* Randomize array in-place using Durstenfeld shuffle algorithm */
 function shuffleArray(array) {
   let shuffledArray = array.slice(0);
 
@@ -116,9 +208,9 @@ function shuffleArray(array) {
   return shuffledArray;
 }
 
-function getLevels(start, end) {
+function getLevels(end) {
   var list = [];
-  for (var i = start; i <= end; i++) {
+  for (var i = 1; i <= end; i++) {
       list.push(i);
   }
 
