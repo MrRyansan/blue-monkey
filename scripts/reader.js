@@ -1,3 +1,7 @@
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+})
+
 async function processFilters() {
   // ===========================
   // input variables
@@ -108,6 +112,8 @@ async function getVocabularyData(apiToken, endLevel) {
         vocabItem.level = item.data.level;
         vocabItem.characters = item.data.characters;
         vocabItem.context_sentences = item.data.context_sentences;
+        vocabItem.meaning = item.data.meanings[0].meaning;
+        vocabItem.reading = item.data.readings[0].reading;
 
         vocabItems.push(vocabItem);
       });
@@ -153,9 +159,9 @@ function displaySentencesOnPage(sentences, shouldShuffle, highlightVocab, number
   mainDiv.style.fontSize = fontSize;
 }
 
-function getSentenceWithVocabHighlighted(vocabWord, sentence){
-  let highlightedText = "<span class='vocab-word'>" + vocabWord + "</span>";
-  let formattedSentence = sentence.replace(vocabWord, highlightedText);
+function getSentenceWithVocabHighlighted(vocab){
+  let highlightedText = "<span class='vocab-word' data-toggle='tooltip' title='Level: " + vocab.level + "&#013;English reading: " + vocab.meaning + "&#013;Japanese reading: " + vocab.reading + "&#013;Sentence reading: " + vocab.englishSentence + "' >" + vocab.vocabWord + "</span>";
+  let formattedSentence = vocab.japaneseSentence.replace(vocab.vocabWord, highlightedText);
 
   return formattedSentence;
 }
@@ -172,11 +178,14 @@ function getSentences(vocabItems, shouldOnlyIncludeOneSentence, startLevel, endL
     let sentenceData = vocabItem.context_sentences;
 
     for (let i=0; i<sentenceData.length; i++) {
+      let level = vocabItem.level;
       let vocabWord = vocabItem.characters;
+      let meaning = vocabItem.meaning;
+      let reading = vocabItem.reading;
       let japaneseSentence = sentenceData[i].ja;
       let englishSentence = sentenceData[i].en;
 
-      sentences.push({ vocabWord, japaneseSentence, englishSentence });
+      sentences.push({ level, vocabWord, meaning, reading, japaneseSentence, englishSentence });
 
       if (shouldOnlyIncludeOneSentence) break;
     }
@@ -188,7 +197,7 @@ function getSentences(vocabItems, shouldOnlyIncludeOneSentence, startLevel, endL
 function getSentencesForDisplay(sentences, highlightVocab) {
   let formattedSentences = [];
   sentences.forEach(sentence => {
-    let formattedSentence = highlightVocab ? getSentenceWithVocabHighlighted(sentence.vocabWord, sentence.japaneseSentence) : sentence.japaneseSentence;
+    let formattedSentence = highlightVocab ? getSentenceWithVocabHighlighted(sentence) : sentence.japaneseSentence;
     formattedSentences.push(formattedSentence);
   });
 
