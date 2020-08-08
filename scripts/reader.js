@@ -1,4 +1,10 @@
 $(function () {
+  let token = getApiToken();
+
+  if (token == null) {
+    window.location.href = 'enter-token.html?returnUrl=reader.html';
+  }
+
   $('[data-toggle="tooltip"]').tooltip()
 })
 
@@ -6,21 +12,17 @@ async function processFilters() {
   // ===========================
   // input variables
   // ===========================
-  let shuffle =  document.getElementById("shuffleCheckbox").checked;
-  let includeOnlyOneContextSentence =  document.getElementById("oneContextSentenceCheckbox").checked;
-  let highlightVocab = document.getElementById("highlightVocabCheckbox").checked;
-  let enableContextPopup = true;
-  let startLevel = document.getElementById("beginLevelTextBox").value;
-  let endLevel = document.getElementById("endLevelTextBox").value;
-  let numberOfSentencesPerParagraph = document.getElementById("numOfSentencesPerParagraphTextBox").value;
-  let fontSize = document.getElementById("fontSizeDropdown").value;
-  
-  // let shouldContextSentenceBeRandom = true;
+  let shuffle =  $("#shuffleCheckbox").is(":checked");
+  let includeOnlyOneContextSentence =  $("#oneContextSentenceCheckbox").is(":checked");
+  let highlightVocab = $("#highlightVocabCheckbox").is(":checked");
+  let startLevel = $("#beginLevelTextBox").val();
+  let endLevel = $("#endLevelTextBox").val();
+  let numberOfSentencesPerParagraph = $("#numOfSentencesPerParagraphTextBox").val();
+  let fontSize = $("#fontSizeDropdown").val();
   // ===========================
 
   let apiToken = getApiToken();
   let userData = await getUserData(apiToken);
-  // let maxUserLevel = userData.subscription.max_level_granted;
   let maxUserLevel = userData.level;
   let vocabularyData = await getVocabularyData(apiToken, maxUserLevel);
 
@@ -37,17 +39,17 @@ async function processFilters() {
 
 function adjustLevelFiltersIfNeeded(startLevel, endLevel, maxLevel) {
   if (startLevel > maxLevel) {
-    document.getElementById("beginLevelTextBox").value = maxLevel;
+    $("#beginLevelTextBox").val(maxLevel);
   }
 
   if (endLevel > maxLevel) {
-    document.getElementById("endLevelTextBox").value = maxLevel;
+    $("#endLevelTextBox").val(maxLevel);
   }
 }
 
 function getApiToken() {
-  // TODO: Update this for local storage.
-  return 'c2e9ef1e-07aa-4e01-877e-8c349d8364ca';
+  let localStorageKey = "WaniKaniUserToken";
+  return localStorage.getItem(localStorageKey);
 }
 
 async function getUserData(apiToken, startPage = 1) {
@@ -60,7 +62,6 @@ async function getUserData(apiToken, startPage = 1) {
 
 
   if (!sessionStorage.getItem(localStorageKey)) {
-    //TODO: Use paging to get all available data if not all comes back the first time.
     let apiEndpoint =
         new Request('https://api.wanikani.com/v2/user', {
           method: 'GET',
@@ -133,21 +134,19 @@ async function getVocabularyData(apiToken, endLevel) {
 }
 
 function displaySentencesOnPage(sentences, shouldShuffle, highlightVocab, numberOfSentencesPerParagraph, fontSize){
-  document.getElementById("mainContent").innerHTML = ""
+  $("#mainContent").empty();
   
   let formattedSentences = getSentencesForDisplay(sentences, highlightVocab);
   let sentencesToIterate = shouldShuffle ? shuffleArray(formattedSentences) : formattedSentences;
 
-  let mainDiv = document.getElementById("mainContent");
+  let mainDiv = $("#mainContent");
 
   let sentenceCounter = numberOfSentencesPerParagraph;
   let sentenceBlock = "";
 
   sentencesToIterate.forEach(sentence => {
     if (sentenceCounter === 0) {
-      let paragraphElement = document.createElement("P");
-      paragraphElement.innerHTML = sentenceBlock;
-      mainDiv.appendChild(paragraphElement);
+      mainDiv.append("<p>" + sentenceBlock + "</p>");
       sentenceCounter = numberOfSentencesPerParagraph;
       sentenceBlock = "";
     } else {
@@ -156,11 +155,14 @@ function displaySentencesOnPage(sentences, shouldShuffle, highlightVocab, number
     }
   });
 
-  mainDiv.style.fontSize = fontSize;
+  mainDiv.css("font-size", fontSize);
 }
 
 function getSentenceWithVocabHighlighted(vocab){
-  let highlightedText = "<span class='vocab-word' data-toggle='tooltip' title='Level: " + vocab.level + "&#013;English reading: " + vocab.meaning + "&#013;Japanese reading: " + vocab.reading + "&#013;Sentence reading: " + vocab.englishSentence + "' >" + vocab.vocabWord + "</span>";
+  let text = "Level: " + vocab.level + "&#013;English reading: " + vocab.meaning + "&#013;Japanese reading: " + vocab.reading + "&#013;Sentence reading: " + vocab.englishSentence;
+  text = text.replace("'", "");
+
+  let highlightedText = "<span class='vocab-word' data-toggle='tooltip' title='" + text + "'>" + vocab.vocabWord + "</span>";
   let formattedSentence = vocab.japaneseSentence.replace(vocab.vocabWord, highlightedText);
 
   return formattedSentence;
