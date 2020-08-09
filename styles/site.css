@@ -4,11 +4,11 @@
 
 .vocab-word {
   font-weight: bold;
-  color: blue;
+  color: #007bff;
 }
 
 /* -------------------------------------------------- 
-Sticky footer styles
+  Sticky footer
 -------------------------------------------------- */
 html {
   position: relative;
@@ -28,6 +28,9 @@ body {
   background-color: #f5f5f5;
 }
 
+/* -------------------------------------------------- 
+  Nav Bar
+-------------------------------------------------- */
 
 .nav-link {
   color: #007bff !important;
@@ -39,4 +42,13 @@ body {
 
 .navbar-brand {
   color: #007bff !important;
+}
+
+/* -------------------------------------------------- 
+  Cards
+-------------------------------------------------- */
+
+.card-img-top {
+  max-height: 150px;
+  min-height: 150px;
 }

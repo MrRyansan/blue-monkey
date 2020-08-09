@@ -4,8 +4,6 @@ $(function () {
   if (token == null) {
     window.location.href = 'enter-token.html?returnUrl=reader.html';
   }
-
-  $('[data-toggle="tooltip"]').tooltip()
 })
 
 async function processFilters() {
@@ -35,6 +33,8 @@ async function processFilters() {
                          highlightVocab, 
                          numberOfSentencesPerParagraph, 
                          fontSize);
+
+  $('[data-toggle="popover"]').popover();
 }
 
 function adjustLevelFiltersIfNeeded(startLevel, endLevel, maxLevel) {
@@ -159,10 +159,10 @@ function displaySentencesOnPage(sentences, shouldShuffle, highlightVocab, number
 }
 
 function getSentenceWithVocabHighlighted(vocab){
-  let text = "Level: " + vocab.level + "&#013;English reading: " + vocab.meaning + "&#013;Japanese reading: " + vocab.reading + "&#013;Sentence reading: " + vocab.englishSentence;
+  let text = "<b>Level:</b> " + vocab.level + "<br/><b>English reading:</b> " + vocab.meaning + "<br/><b>Japanese reading:</b> " + vocab.reading + "<br/><b>Sentence reading:</b> " + vocab.englishSentence;
   text = text.replace("'", "");
 
-  let highlightedText = "<span class='vocab-word' data-toggle='tooltip' title='" + text + "'>" + vocab.vocabWord + "</span>";
+  let highlightedText = "<span class='vocab-word' data-toggle='popover' data-html='true' container='body' data-content='" + text + "'>" + vocab.vocabWord + "</span>";
   let formattedSentence = vocab.japaneseSentence.replace(vocab.vocabWord, highlightedText);
 
   return formattedSentence;
