@@ -26,15 +26,17 @@
             <li class="nav-item active">
               <a class="nav-link" href="index.html">Home<span class="sr-only">(current)</span></a>
             </li>
-            <li class="nav-item active">
-              <a class="nav-link" href="reader.html">Reader<span class="sr-only">(current)</span></a>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Apps
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="reader.html">WaniKani Reader<span class="sr-only">(current)</span></a>
+              </div>
             </li>
             <li class="nav-item active">
               <a class="nav-link" href="about.html">About<span class="sr-only">(current)</span></a>
             </li>
-            <!-- <li class="nav-item active">
-              <a class="nav-link" href="contact.html">Contact<span class="sr-only">(current)</span></a>
-            </li> -->
           </ul>
         </div>
       </nav> 
@@ -90,7 +92,7 @@
                   <input type="number" id="beginLevelTextBox" min="1" max="60" value="1" class="form-control"></input>
                 </div>
                 <div class="col">
-                  <label for="highlightVocabCheckbox">Highlight Vocab (click to toggle popup)</label>
+                  <label for="highlightVocabCheckbox">Highlight Vocab</label>
                 </div>
                 <div class="col">
                   <input type="checkbox" id="highlightVocabCheckbox"></input>
