@@ -34,6 +34,10 @@ async function processFilters() {
                          numberOfSentencesPerParagraph, 
                          fontSize);
 
+  $('.popover-dismiss').popover({
+    trigger: 'focus'
+  })
+
   $('[data-toggle="popover"]').popover();
 }
 
@@ -162,7 +166,7 @@ function getSentenceWithVocabHighlighted(vocab){
   let text = "<b>Level:</b> " + vocab.level + "<br/><b>English reading:</b> " + vocab.meaning + "<br/><b>Japanese reading:</b> " + vocab.reading + "<br/><b>Sentence reading:</b> " + vocab.englishSentence;
   text = text.replace("'", "");
 
-  let highlightedText = "<span class='vocab-word' data-toggle='popover' data-html='true' container='body' data-content='" + text + "'>" + vocab.vocabWord + "</span>";
+  let highlightedText = "<span tabindex='0' data-trigger='focus' class='vocab-word' data-toggle='popover' data-html='true' container='body' data-content='" + text + "'>" + vocab.vocabWord + "</span>";
   let formattedSentence = vocab.japaneseSentence.replace(vocab.vocabWord, highlightedText);
 
   return formattedSentence;
