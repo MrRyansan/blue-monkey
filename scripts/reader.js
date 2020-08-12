@@ -4,7 +4,7 @@ $(function () {
   if (token == null) {
     window.location.href = 'enter-token.html?returnUrl=reader.html';
   }
-})
+});
 
 async function processFilters() {
   // ===========================
@@ -57,7 +57,7 @@ function getApiToken() {
 }
 
 async function getUserData(apiToken, startPage = 1) {
-  let localStorageKey = "WaniKaniUserData";
+  let sessionStorageKey = "WaniKaniUserData";
   let requestHeaders =
       new Headers({
         'Wanikani-Revision': '20170710',
@@ -65,7 +65,7 @@ async function getUserData(apiToken, startPage = 1) {
       });
 
 
-  if (!sessionStorage.getItem(localStorageKey)) {
+  if (!sessionStorage.getItem(sessionStorageKey)) {
     let apiEndpoint =
         new Request('https://api.wanikani.com/v2/user', {
           method: 'GET',
@@ -75,18 +75,18 @@ async function getUserData(apiToken, startPage = 1) {
     return fetch(apiEndpoint)
       .then(response => response.json())
       .then(responseBody => {
-        sessionStorage.setItem(localStorageKey, JSON.stringify(responseBody.data));
+        sessionStorage.setItem(sessionStorageKey, JSON.stringify(responseBody.data));
         return responseBody.data;
       });
   } else {
-    return Promise.resolve(JSON.parse(sessionStorage.getItem(localStorageKey)));
+    return Promise.resolve(JSON.parse(sessionStorage.getItem(sessionStorageKey)));
   }
 }
 
 async function getVocabularyData(apiToken, endLevel) {
-  let localStorageKey = "WaniKaniVocab";
+  let sessionStorageKey = "WaniKaniVocab";
 
-  if (!localStorage.getItem(localStorageKey)) {
+  if (!sessionStorage.getItem(sessionStorageKey)) {
     let levelsToInclude = getLevels(endLevel);
     let apiEndpointPath = 'subjects?types=vocabulary&levels=' + levelsToInclude;
     let keepLooping = true;
@@ -130,10 +130,10 @@ async function getVocabularyData(apiToken, endLevel) {
       }
     }
 
-    localStorage.setItem(localStorageKey, JSON.stringify(vocabItems));
+    sessionStorage.setItem(sessionStorageKey, JSON.stringify(vocabItems));
     return Promise.resolve(vocabItems);
   } else {
-    return Promise.resolve(JSON.parse(localStorage.getItem(localStorageKey)));
+    return Promise.resolve(JSON.parse(sessionStorage.getItem(sessionStorageKey)));
   }
 }
 
