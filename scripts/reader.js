@@ -4,6 +4,8 @@ $(function () {
   if (token == null) {
     window.location.href = 'enter-token.html?returnUrl=reader.html';
   }
+
+  $("#spinner").hide();
 });
 
 async function processFilters() {
@@ -19,10 +21,14 @@ async function processFilters() {
   let fontSize = $("#fontSizeDropdown").val();
   // ===========================
 
+  $("#spinner").show();
+
   let apiToken = getApiToken();
   let userData = await getUserData(apiToken);
   let maxUserLevel = userData.level;
   let vocabularyData = await getVocabularyData(apiToken, maxUserLevel);
+
+
 
   let sentences = getSentences(vocabularyData, includeOnlyOneContextSentence, startLevel, endLevel);
 
@@ -39,6 +45,8 @@ async function processFilters() {
   })
 
   $('[data-toggle="popover"]').popover();
+
+  $("#spinner").hide();
 }
 
 function adjustLevelFiltersIfNeeded(startLevel, endLevel, maxLevel) {

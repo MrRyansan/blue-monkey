@@ -6,6 +6,8 @@ $(function () {
   }
 
   populatePage(token);
+
+  $("#spinner").hide();
 });
 
 async function populatePage(apiToken) {
@@ -29,6 +31,8 @@ async function populatePage(apiToken) {
                 `;
     $("#tableBody").append(htmlData);
   });
+
+  $('#verbTable').DataTable();
 }
 
 async function getUserData(apiToken) {
