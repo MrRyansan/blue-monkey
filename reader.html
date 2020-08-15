@@ -32,6 +32,7 @@
               </a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                 <a class="dropdown-item" href="reader.html">WaniKani Reader<span class="sr-only">(current)</span></a>
+                <a class="dropdown-item" href="verbs.html">WaniKani Verbs<span class="sr-only">(current)</span></a>
               </div>
             </li>
             <li class="nav-item active">
@@ -43,7 +44,7 @@
     </header>
 
     <main role="main" class="container mt-2">
-      <h1><img src="images/wanikani-reader-icon.svg" width="50px;">WaniKani Reader</h1>
+      <h1><img src="images/wanikani-reader-icon.svg" width="50px;">  WaniKani Reader</h1>
       <div class="row mt-2">
         <div class="card" style="width: 75%;">
           <div class="card-body">
@@ -122,8 +123,14 @@
         <div id="mainContent"></div>
       </div>
 
+      <div class="text-center mt-2" id="spinner">
+        <div class="spinner-border text-primary" role="status">
+          <span class="sr-only">Loading...</span>
+        </div>
+      </div>   
+
       <div class="row text-center text-muted">
-        WaniKani Reader v0.5.0
+        WaniKani Reader v0.5.1
       </div>
     </main>
 
