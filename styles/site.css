@@ -1,10 +1,6 @@
-.main-content {
-  padding-top: 20px;
-}
 
 .vocab-word {
   font-weight: bold;
-  color: #007bff;
 }
 
 /* -------------------------------------------------- 
@@ -51,4 +47,40 @@ body {
 .card-img-top {
   max-height: 150px;
   min-height: 150px;
+}
+
+/* -------------------------------------------------- 
+  Popovers
+-------------------------------------------------- */
+
+/* The max width is dependant on the container (more info below) */
+.popover{
+  max-width: 100% !important; /* Max Width of the popover (depending on the container!) */
+}
+
+/* -------------------------------------------------- 
+  YouTube Videos
+-------------------------------------------------- */
+
+.video-container {
+  overflow: hidden;
+  position: relative;
+  width:100%;
+  background-color: #e3f2fd;
+  border-radius: 10px;
+}
+
+.video-container::after {
+  padding-top: 56.25%;
+  display: block;
+  content: '';
+}
+
+.video-container iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  padding:10px;
 }

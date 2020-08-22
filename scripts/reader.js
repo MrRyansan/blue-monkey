@@ -6,6 +6,8 @@ $(function () {
   }
 
   $("#spinner").hide();
+
+  loadFilterPrefs();
 });
 
 async function processFilters() {
@@ -22,13 +24,12 @@ async function processFilters() {
   // ===========================
 
   $("#spinner").show();
+  $("#mainContent").empty();
 
   let apiToken = getApiToken();
   let userData = await getUserData(apiToken);
   let maxUserLevel = userData.level;
   let vocabularyData = await getVocabularyData(apiToken, maxUserLevel);
-
-
 
   let sentences = getSentences(vocabularyData, includeOnlyOneContextSentence, startLevel, endLevel);
 
@@ -47,6 +48,40 @@ async function processFilters() {
   $('[data-toggle="popover"]').popover();
 
   $("#spinner").hide();
+
+  saveFilterPrefs();
+}
+
+function saveFilterPrefs() {
+  let shuffle =  $("#shuffleCheckbox").is(":checked");
+  let includeOnlyOneContextSentence =  $("#oneContextSentenceCheckbox").is(":checked");
+  let highlightVocab = $("#highlightVocabCheckbox").is(":checked");
+  let startLevel = $("#beginLevelTextBox").val();
+  let endLevel = $("#endLevelTextBox").val();
+  let numberOfSentencesPerParagraph = $("#numOfSentencesPerParagraphTextBox").val();
+  let fontSize = $("#fontSizeDropdown").val();
+  let localStorageKey = "WaniKaniReaderPreferences"
+
+  let prefs = shuffle + ',' + includeOnlyOneContextSentence + ',' + highlightVocab + ',' + startLevel + ',' + endLevel + ',' + numberOfSentencesPerParagraph + ',' + fontSize;
+
+  localStorage.setItem(localStorageKey, prefs);
+}
+
+function loadFilterPrefs() {
+  let localStorageKey = "WaniKaniReaderPreferences"
+
+  if (!localStorage.getItem(localStorageKey)) return;
+
+  let prefs = localStorage.getItem(localStorageKey);
+  let prefsArray = prefs.split(',');
+
+  $("#shuffleCheckbox").prop("checked", prefsArray[0] === 'true');
+  $("#oneContextSentenceCheckbox").prop("checked", prefsArray[1] === 'true');
+  $("#highlightVocabCheckbox").prop("checked", prefsArray[2] === 'true');
+  $("#beginLevelTextBox").val(prefsArray[3]);
+  $("#endLevelTextBox").val(prefsArray[4]);
+  $("#numOfSentencesPerParagraphTextBox").val(prefsArray[5]);
+  $("#fontSizeDropdown").val(prefsArray[6]);
 }
 
 function adjustLevelFiltersIfNeeded(startLevel, endLevel, maxLevel) {
@@ -92,62 +127,69 @@ async function getUserData(apiToken, startPage = 1) {
 }
 
 async function getVocabularyData(apiToken, endLevel) {
-  let sessionStorageKey = "WaniKaniVocab";
-
-  if (!sessionStorage.getItem(sessionStorageKey)) {
-    let levelsToInclude = getLevels(endLevel);
-    let apiEndpointPath = 'subjects?types=vocabulary&levels=' + levelsToInclude;
-    let keepLooping = true;
-    let vocabItems = [];
-    let requestHeaders =
-        new Headers({
-          'Wanikani-Revision': '20170710',
-          Authorization: 'Bearer ' + apiToken,
-        });
-
-    let url = "https://api.wanikani.com/v2/" + apiEndpointPath;
-
-    while (keepLooping) {
-      let apiEndpoint = new Request( url, {
-        method: 'GET',
-        headers: requestHeaders
+  let levelsToInclude = getLevels(endLevel);
+  let apiEndpointPath = 'subjects?types=vocabulary&levels=' + levelsToInclude;
+  let keepLooping = true;
+  let vocabItems = [];
+  let requestHeaders =
+      new Headers({
+        'Wanikani-Revision': '20170710',
+        Authorization: 'Bearer ' + apiToken,
       });
 
-      let response = await fetch(apiEndpoint)
-        .then(response => response.json())
-        .then(responseBody => {
-          return responseBody;
-      });
+  let url = "https://api.wanikani.com/v2/" + apiEndpointPath;
 
-      response.data.forEach(item => {
-        var vocabItem = {};
+  while (keepLooping) {
+    let apiEndpoint = new Request( url, {
+      method: 'GET',
+      headers: requestHeaders
+    });
 
-        vocabItem.level = item.data.level;
-        vocabItem.characters = item.data.characters;
-        vocabItem.context_sentences = item.data.context_sentences;
-        vocabItem.meaning = item.data.meanings[0].meaning;
-        vocabItem.reading = item.data.readings[0].reading;
+    let response = await fetch(apiEndpoint)
+      .then(response => response.json())
+      .then(responseBody => {
+        return responseBody;
+    });
 
-        vocabItems.push(vocabItem);
-      });
+    response.data.forEach(item => {
+      var vocabItem = {};
 
-      if (response.pages.next_url) {
-        url = response.pages.next_url;
-      } else {
-        keepLooping = false;
-      }
+      vocabItem.level = item.data.level;
+      vocabItem.characters = item.data.characters;
+      vocabItem.context_sentences = item.data.context_sentences;
+      vocabItem.meaning = getMeanings(item.data.meanings);
+      vocabItem.reading = getReadings(item.data.readings);
+
+      vocabItems.push(vocabItem);
+    });
+
+    if (response.pages.next_url) {
+      url = response.pages.next_url;
+    } else {
+      keepLooping = false;
     }
-
-    sessionStorage.setItem(sessionStorageKey, JSON.stringify(vocabItems));
-    return Promise.resolve(vocabItems);
-  } else {
-    return Promise.resolve(JSON.parse(sessionStorage.getItem(sessionStorageKey)));
   }
+
+  return Promise.resolve(vocabItems);
+}
+
+function getMeanings (meaningArray) {
+  let meanings = meaningArray.map(x => {
+    return x.meaning;
+  });
+
+  return meanings.join(", ");
+}
+
+function getReadings (readingArray) {
+  let readings = readingArray.map(x => {
+    return x.reading;
+  });
+
+  return readings.join(" or ");
 }
 
 function displaySentencesOnPage(sentences, shouldShuffle, highlightVocab, numberOfSentencesPerParagraph, fontSize){
-  $("#mainContent").empty();
-  
   let formattedSentences = getSentencesForDisplay(sentences, highlightVocab);
   let sentencesToIterate = shouldShuffle ? shuffleArray(formattedSentences) : formattedSentences;
 
@@ -171,13 +213,26 @@ function displaySentencesOnPage(sentences, shouldShuffle, highlightVocab, number
 }
 
 function getSentenceWithVocabHighlighted(vocab){
-  let text = "<b>Level:</b> " + vocab.level + "<br/><b>English reading:</b> " + vocab.meaning + "<br/><b>Japanese reading:</b> " + vocab.reading + "<br/><b>Sentence reading:</b> " + vocab.englishSentence;
-  text = text.replace("'", "");
+  let html = `<b>Level:</b> ${vocab.level}<br/>
+              <b>English Reading:</b> ${ formatForHtml(vocab.meaning) }<br/>
+              <b>Japanese Reading:</b> ${ formatForHtml(vocab.reading) }<br/>
+              <b>Sentence Reading:</b> ${ formatForHtml(vocab.englishSentence) }<br/>
+              <b>Open In:</b> <a href="https://www.wanikani.com/vocabulary/${ formatForHtml(vocab.vocabWord) }" target="_blank">WaniKani</a>
+  `;
 
-  let highlightedText = "<span tabindex='0' data-trigger='focus' class='vocab-word' data-toggle='popover' data-html='true' container='body' data-content='" + text + "'>" + vocab.vocabWord + "</span>";
+  let highlightedText = "<span tabindex='0' data-trigger='focus' class='vocab-word' data-toggle='popover' data-html='true' container='body' data-content='" + html + "'>" + vocab.vocabWord + "</span>";
   let formattedSentence = vocab.japaneseSentence.replace(vocab.vocabWord, highlightedText);
 
   return formattedSentence;
+}
+
+function formatForHtml(str) {
+  str = str.replace(/&/g, "&amp;");
+  str = str.replace(/>/g, "&gt;");
+  str = str.replace(/</g, "&lt;");
+  str = str.replace(/"/g, "&quot;");
+  str = str.replace(/'/g, "&#039;");
+  return str;
 }
 
 function getSentences(vocabItems, shouldOnlyIncludeOneSentence, startLevel, endLevel) {
@@ -196,12 +251,23 @@ function getSentences(vocabItems, shouldOnlyIncludeOneSentence, startLevel, endL
       let vocabWord = vocabItem.characters;
       let meaning = vocabItem.meaning;
       let reading = vocabItem.reading;
-      let japaneseSentence = sentenceData[i].ja;
-      let englishSentence = sentenceData[i].en;
+      let japaneseSentence = "";
+      let englishSentence = ""
+
+      if (shouldOnlyIncludeOneSentence) {
+        let randomIndex = Math.floor(Math.random() * sentenceData.length);
+        japaneseSentence = sentenceData[randomIndex].ja;
+        englishSentence = sentenceData[randomIndex].en;
+      } else {
+        japaneseSentence = sentenceData[i].ja;
+        englishSentence = sentenceData[i].en;
+      }
 
       sentences.push({ level, vocabWord, meaning, reading, japaneseSentence, englishSentence });
 
-      if (shouldOnlyIncludeOneSentence) break;
+      if (shouldOnlyIncludeOneSentence) {
+        break;
+      }
     }
   });
 
