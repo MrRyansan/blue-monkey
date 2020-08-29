@@ -5,12 +5,14 @@ $(function () {
     window.location.href = 'enter-token.html?returnUrl=verbs.html';
   }
 
-  populatePage(token);
-
   $("#spinner").hide();
+
+  populatePage(token);
 });
 
 async function populatePage(apiToken) {
+  $("#spinner").show();
+
   let userData = await getUserData(apiToken);
   let maxUserLevel = userData.level;
   let verbData = await getVerbData(apiToken, maxUserLevel);
@@ -33,6 +35,8 @@ async function populatePage(apiToken) {
   });
 
   $('#verbTable').DataTable();
+
+  $("#spinner").hide();
 }
 
 async function getUserData(apiToken) {
