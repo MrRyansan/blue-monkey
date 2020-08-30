@@ -100,15 +100,13 @@ async function getVerbData(apiToken, endLevel) {
 
       let partsOfSpeech = item.data.parts_of_speech;
 
-      if (partsOfSpeech.includes("ichidan verb") || partsOfSpeech.includes("godan verb")) {
-        verb.level = item.data.level;
-        verb.meaning = getMeanings(item.data.meanings);
-        verb.reading = item.data.readings[0].reading;
-        verb.characters = item.data.characters;
-        verb.partsOfSpeech = partsOfSpeech;
+      verb.level = item.data.level;
+      verb.meaning = item.data.meanings[0].meaning;
+      verb.reading = item.data.readings[0].reading;
+      verb.characters = item.data.characters;
+      verb.partsOfSpeech = partsOfSpeech;
 
-        verbsToReturn.push(verb);
-      }
+      verbsToReturn.push(verb);
     });
 
     if (response.pages.next_url) {
@@ -119,14 +117,6 @@ async function getVerbData(apiToken, endLevel) {
   }
 
   return Promise.resolve(verbsToReturn);
-}
-
-function getMeanings (meaningArray) {
-  let meanings = meaningArray.map(x => {
-    return x.meaning;
-  });
-
-  return meanings.join(", ");
 }
 
 function getLevels(end) {
