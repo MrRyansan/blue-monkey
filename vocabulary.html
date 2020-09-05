@@ -16,79 +16,153 @@
     <header id="header"></header>
 
     <main role="main" class="container mt-2">
-      <h1><img src="images/wanikani-verbs-icon.svg" width="50px;">  WaniKani Vocabulary</h1>
+      <h1><img src="images/wanikani-vocab-icon.svg" width="45px;">  WaniKani Vocabulary</h1>
 
-      <div class="row mt-2">
-        <div class="card" style="width: 75%;">
+      <div class="row mt-2 mb-2">
+        <div class="card">
           <div class="card-body">
             <form>
               <div class="row">
                 <div class="col">
-                  <label for="fontSizeDropdown">Type</label>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="numeral" id="numeralFilter">
+                    <label class="form-check-label" for="defaultCheck1">
+                      numeral
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="noun" id="nounFilter">
+                    <label class="form-check-label" for="defaultCheck1">
+                      noun
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="intransitive verb" id="intransitiveVerbFilter">
+                    <label class="form-check-label" for="defaultCheck1">
+                      intransitive verb
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="godan verb" id="godanVerbFilter">
+                    <label class="form-check-label" for="defaultCheck1">
+                      godan verb
+                    </label>
+                  </div>
                 </div>
+
                 <div class="col">
-                  <select id="fontSizeDropdown">
-                    <option value="xx-small">All</option>
-                    <option value="xx-small">Adjective</option>
-                    <option value="xx-small">Adverb</option>
-                    <option value="xx-small">Expression</option>
-                    <option value="xx-small">Numeral</option>
-                    <option value="x-small">Noun</option>
-                    <option value="small">Verb</option>
-                    <option value="medium" selected>medium</option>
-                    <option value="large">large</option>
-                    <option value="x-large">x-large</option>
-                    <option value="xx-large">xx-large</option>
-                  </select>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="transitive verb" id="transitiveVerbFilter">
+                    <label class="form-check-label" for="defaultCheck1">
+                      transitive verb
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="ichidan verb" id="ichidanVerbFilter">
+                    <label class="form-check-label" for="defaultCheck1">
+                      ichidan verb
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="suffix" id="suffixFilter">
+                    <label class="form-check-label" for="defaultCheck1">
+                      suffix
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="expression" id="expressionFilter">
+                    <label class="form-check-label" for="defaultCheck1">
+                      expression
+                    </label>
+                  </div>
                 </div>
-                <div class="col"></div>
-                <div class="col"></div>
-              </div>
-              <div class="row">
+
                 <div class="col">
-                  <label for="numOfSentencesPerParagraphTextBox">Paragraph Size</label>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="い adjective" id="iAdjectiveFilter">
+                    <label class="form-check-label" for="defaultCheck1">
+                      い adjective
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="adjective" id="adjectiveFilter">
+                    <label class="form-check-label" for="defaultCheck1">
+                      adjective
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="proper noun" id="properNounFilter">
+                    <label class="form-check-label" for="defaultCheck1">
+                      proper noun
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="adverb" id="adverbFilter">
+                    <label class="form-check-label" for="defaultCheck1">
+                      adverb
+                    </label>
+                  </div>
                 </div>
+
                 <div class="col">
-                  <input type="number" id="numOfSentencesPerParagraphTextBox" min="1" max="20" value="10" class="form-control"></input>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="prefix" id="prefixFilter">
+                    <label class="form-check-label" for="defaultCheck1">
+                      prefix
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="な adjective" id="naAdjectiveFilter">
+                    <label class="form-check-label" for="defaultCheck1">
+                      な adjective
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="の adjective" id="noAdjectiveFilter">
+                    <label class="form-check-label" for="defaultCheck1">
+                      の adjective
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="する verb" id="suruVerbFilter">
+                    <label class="form-check-label" for="defaultCheck1">
+                      する verb
+                    </label>
+                  </div>
                 </div>
+
                 <div class="col">
-                  <label for="shuffleCheckbox">Shuffle Sentences</label>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="interjection" id="interjectionFilter">
+                    <label class="form-check-label" for="defaultCheck1">
+                      interjection
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="counter" id="counterFilter">
+                    <label class="form-check-label" for="defaultCheck1">
+                      counter
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="pronoun" id="pronounCounter">
+                    <label class="form-check-label" for="defaultCheck1">
+                      pronoun
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="conjunction" id="conjunctionFilter">
+                    <label class="form-check-label" for="defaultCheck1">
+                      conjunction
+                    </label>
+                  </div>
                 </div>
-                <div class="col">
-                  <input type="checkbox" id="shuffleCheckbox"></input>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col">
-                  <label for="beginLevelTextBox">Starting Level</label>
-                </div>
-                <div class="col">
-                  <input type="number" id="beginLevelTextBox" min="1" max="60" value="1" class="form-control"></input>
-                </div>
-                <div class="col">
-                  <label for="highlightVocabCheckbox">Bold Vocab w/PopUp</label>
-                </div>
-                <div class="col">
-                  <input type="checkbox" id="highlightVocabCheckbox"></input>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col">
-                  <label for="endLevelTextBox">Ending Level</label>
-                </div>
-                <div class="col">
-                  <input type="number" id="endLevelTextBox" min="1" max="60" value="1" class="form-control"></input> 
-                </div>
-                <div class="col">
-                  <label for="oneContextSentenceCheckbox">One Sentence Per Vocab</label>
-                </div>
-                <div class="col">
-                  <input type="checkbox" id="oneContextSentenceCheckbox"></input>
-                </div>
+
               </div>
               <div class="row">
                 <div class="col text-center mt-2">
-                  <input type="button" value="Go!" onclick="processFilters()" class="btn btn-primary"></input>
+                  <input type="button" value="Check/Uncheck All" onclick="toggleCheckboxes()" class="btn btn-primary"></input>
+                  <input type="button" value="Filter Results" onclick="processFilters()" class="btn btn-primary"></input>
                 </div>
               </div>
             </form>
@@ -97,7 +171,7 @@
       </div>
 
       <div id="mainContent">
-        <table class="table table-striped table-bordered table-sm" id="verbTable">
+        <table class="table table-striped table-bordered table-sm" id="vocabTable">
           <thead class="thead-light">
             <tr>
               <th scope="col">Level</th>

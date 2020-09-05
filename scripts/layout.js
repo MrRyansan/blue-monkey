@@ -23,7 +23,7 @@ function getHeader() {
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
           <a class="dropdown-item" href="reader.html">WaniKani Reader<span class="sr-only">(current)</span></a>
-          <a class="dropdown-item" href="verbs.html">WaniKani Verbs<span class="sr-only">(current)</span></a>
+          <a class="dropdown-item" href="vocabulary.html">WaniKani Vocabulary<span class="sr-only">(current)</span></a>
         </div>
       </li>
       <li class="nav-item active">

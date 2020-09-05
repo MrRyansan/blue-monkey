@@ -2,7 +2,7 @@ $(function () {
   let token = getApiToken();
 
   if (token == null) {
-    window.location.href = 'enter-token.html?returnUrl=verbs.html';
+    window.location.href = 'enter-token.html?returnUrl=vocabulary.html';
   }
 
   $("#spinner").hide();
@@ -10,16 +10,37 @@ $(function () {
   populatePage(token);
 });
 
+function toggleCheckboxes() {
+  if($("input:checkbox").not(':checked').length > 0) {
+    $("input:checkbox").prop("checked", true);  
+  } else {
+    $("input:checkbox").prop("checked", false);
+  }
+}
+
+function processFilters() {
+  let searchItems = [];
+
+  $("input:checked").each(function () {
+    var value = $(this).attr("value");
+    searchItems.push(value);
+  });
+
+  let searchRegex = searchItems.join("|");
+
+  $('#vocabTable').DataTable().column(1).search(searchRegex, true, false).draw();
+}
+
 async function populatePage(apiToken) {
   $("#spinner").show();
 
   let userData = await getUserData(apiToken);
   let maxUserLevel = userData.level;
-  let verbData = await getVerbData(apiToken, maxUserLevel);
+  let vocabData = await getVocabData(apiToken, maxUserLevel);
 
-  verbData.sort(compare)
+  vocabData.sort(compare)
 
-  verbData.forEach(item => {
+  vocabData.forEach(item => {
 
   let htmlData = `
                   <tr>
@@ -28,15 +49,28 @@ async function populatePage(apiToken) {
                     <td scope="col">${item.characters}</td>
                     <td scope="col">${item.reading}</td>
                     <td scope="col">${item.meaning}</td>
-                    <td scope="col"><a href="https://cooljugator.com/ja/${item.characters}" target="_blank">Conjugate</a></td>
+                    <td scope="col">${getEndColumnHtml(item)}</td>
                   </tr>
                 `;
     $("#tableBody").append(htmlData);
   });
 
-  $('#verbTable').DataTable();
+  $('#vocabTable').DataTable();
 
   $("#spinner").hide();
+}
+
+function getEndColumnHtml(item) {
+
+  let returnValue= `<a href="https://www.wanikani.com/vocabulary/${item.characters}" target="_blank">WaniKani</a>`;
+
+  const found = item.partsOfSpeech.some(x => (x.indexOf(" verb") > 0));
+  
+  if (found) {
+    returnValue += `<br/><a href="https://cooljugator.com/ja/${item.characters}" target="_blank">Conjugate</a>`;
+  }
+
+  return returnValue;
 }
 
 async function getUserData(apiToken) {
@@ -70,11 +104,11 @@ function getApiToken() {
   return localStorage.getItem(localStorageKey);
 }
 
-async function getVerbData(apiToken, endLevel) {
+async function getVocabData(apiToken, endLevel) {
   let levelsToInclude = getLevels(endLevel);
   let apiEndpointPath = 'subjects?types=vocabulary&levels=' + levelsToInclude;
   let keepLooping = true;
-  let verbsToReturn = [];
+  let vocabToReturn = [];
   let requestHeaders =
       new Headers({
         'Wanikani-Revision': '20170710',
@@ -96,17 +130,17 @@ async function getVerbData(apiToken, endLevel) {
     });
 
     response.data.forEach(item => {
-      var verb = {};
+      var vocab = {};
 
       let partsOfSpeech = item.data.parts_of_speech;
 
-      verb.level = item.data.level;
-      verb.meaning = item.data.meanings[0].meaning;
-      verb.reading = item.data.readings[0].reading;
-      verb.characters = item.data.characters;
-      verb.partsOfSpeech = partsOfSpeech;
+      vocab.level = item.data.level;
+      vocab.meaning = item.data.meanings[0].meaning;
+      vocab.reading = item.data.readings[0].reading;
+      vocab.characters = item.data.characters;
+      vocab.partsOfSpeech = partsOfSpeech;
 
-      verbsToReturn.push(verb);
+      vocabToReturn.push(vocab);
     });
 
     if (response.pages.next_url) {
@@ -116,7 +150,7 @@ async function getVerbData(apiToken, endLevel) {
     }
   }
 
-  return Promise.resolve(verbsToReturn);
+  return Promise.resolve(vocabToReturn);
 }
 
 function getLevels(end) {
