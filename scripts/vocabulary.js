@@ -67,7 +67,7 @@ function getEndColumnHtml(item) {
   const found = item.partsOfSpeech.some(x => (x.indexOf(" verb") > 0));
   
   if (found) {
-    returnValue += `<br/><a href="https://cooljugator.com/ja/${item.characters}" target="_blank">Conjugate</a>`;
+    returnValue += `<br/><a href="https://cooljugator.com/ja/${item.characters}" target="_blank">Cooljugator</a>`;
   }
 
   return returnValue;
