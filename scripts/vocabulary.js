@@ -8,6 +8,25 @@ $(function () {
   $("#spinner").hide();
 
   populatePage(token);
+
+  $.fn.dataTable.ext.search.push(
+    function( settings, data, dataIndex ) {
+      let min = parseInt($("#beginLevelTextBox").val(), 10);
+      let max = parseInt($("#endLevelTextBox").val(), 10);
+
+      var level = parseFloat( data[0] ) || 0; // use data for the level column
+
+      if ( ( isNaN( min ) && isNaN( max ) ) ||
+            ( isNaN( min ) && level <= max ) ||
+            ( min <= level   && isNaN( max ) ) ||
+            ( min <= level   && level <= max ) )
+      {
+          return true;
+      }
+      
+      return false;
+    }
+  );
 });
 
 function toggleCheckboxes() {
@@ -38,6 +57,8 @@ async function populatePage(apiToken) {
   let maxUserLevel = userData.level;
   let vocabData = await getVocabData(apiToken, maxUserLevel);
 
+  $("#endLevelTextBox").val(maxUserLevel);
+
   vocabData.sort(compare)
 
   vocabData.forEach(item => {
@@ -55,9 +76,9 @@ async function populatePage(apiToken) {
     $("#tableBody").append(htmlData);
   });
 
-  $('#vocabTable').DataTable();
-
   $("#spinner").hide();
+
+  $('#vocabTable').DataTable();
 }
 
 function getEndColumnHtml(item) {
@@ -174,4 +195,21 @@ function compare(a, b) {
     comparison = -1;
   }
   return comparison;
+}
+
+function download_csv() {
+  let csv = "";
+
+  let rows = $('#vocabTable').DataTable().rows({ filter : 'applied'}).data();
+
+  for (let index = 0; index < rows.length; index++) {
+    csv += `${rows[index][2]},${rows[index][3]} ${rows[index][4]}`;
+    csv += "\n";
+  }
+
+  var hiddenElement = document.createElement('a');
+  hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);
+  hiddenElement.target = '_blank';
+  hiddenElement.download = 'vocabulary.csv';
+  hiddenElement.click();
 }
