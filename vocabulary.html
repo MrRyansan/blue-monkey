@@ -19,75 +19,43 @@
       <h1><img src="images/wanikani-vocab-icon.svg" width="45px;">  WaniKani Vocabulary</h1>
 
       <div class="row mt-2 mb-2">
-        <div class="card">
+        <div class="card" style="width:65%">
           <div class="card-body">
             <form>
+              <div class="row h5">
+                Levels
+              </div>
               <div class="row">
                 <div class="col">
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="numeral" id="numeralFilter">
-                    <label class="form-check-label" for="defaultCheck1">
-                      numeral
-                    </label>
-                  </div>
+                  <label for="beginLevelTextBox">Starting Level</label>
+                </div>
+                <div class="col">
+                  <input type="number" id="beginLevelTextBox" min="1" max="60" value="1" class="form-control"></input>
+                </div>
+                <div class="col"></div>
+                <div class="col"></div>
+                <div class="col"></div>
+              </div>
+              <div class="row">
+                <div class="col">
+                  <label for="endLevelTextBox">Ending Level</label>
+                </div>
+                <div class="col">
+                  <input type="number" id="endLevelTextBox" min="1" max="60" value="1" class="form-control"></input> 
+                </div>
+                <div class="col"></div>
+                <div class="col"></div>
+                <div class="col"></div>
+              </div>
+              <div class="row h5">
+                Types
+              </div>
+              <div class="row">
+                <div class="col">
                   <div class="form-check">
                     <input class="form-check-input" type="checkbox" value="noun" id="nounFilter">
                     <label class="form-check-label" for="defaultCheck1">
                       noun
-                    </label>
-                  </div>
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="intransitive verb" id="intransitiveVerbFilter">
-                    <label class="form-check-label" for="defaultCheck1">
-                      intransitive verb
-                    </label>
-                  </div>
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="godan verb" id="godanVerbFilter">
-                    <label class="form-check-label" for="defaultCheck1">
-                      godan verb
-                    </label>
-                  </div>
-                </div>
-
-                <div class="col">
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="transitive verb" id="transitiveVerbFilter">
-                    <label class="form-check-label" for="defaultCheck1">
-                      transitive verb
-                    </label>
-                  </div>
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="ichidan verb" id="ichidanVerbFilter">
-                    <label class="form-check-label" for="defaultCheck1">
-                      ichidan verb
-                    </label>
-                  </div>
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="suffix" id="suffixFilter">
-                    <label class="form-check-label" for="defaultCheck1">
-                      suffix
-                    </label>
-                  </div>
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="expression" id="expressionFilter">
-                    <label class="form-check-label" for="defaultCheck1">
-                      expression
-                    </label>
-                  </div>
-                </div>
-
-                <div class="col">
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="い adjective" id="iAdjectiveFilter">
-                    <label class="form-check-label" for="defaultCheck1">
-                      い adjective
-                    </label>
-                  </div>
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="adjective" id="adjectiveFilter">
-                    <label class="form-check-label" for="defaultCheck1">
-                      adjective
                     </label>
                   </div>
                   <div class="form-check">
@@ -97,20 +65,25 @@
                     </label>
                   </div>
                   <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="adverb" id="adverbFilter">
+                    <input class="form-check-input" type="checkbox" value="pronoun" id="pronounCounter">
                     <label class="form-check-label" for="defaultCheck1">
-                      adverb
+                      pronoun
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="adjective" id="adjectiveFilter">
+                    <label class="form-check-label" for="defaultCheck1">
+                      adjective
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="い adjective" id="iAdjectiveFilter">
+                    <label class="form-check-label" for="defaultCheck1">
+                      い adjective
                     </label>
                   </div>
                 </div>
-
                 <div class="col">
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="prefix" id="prefixFilter">
-                    <label class="form-check-label" for="defaultCheck1">
-                      prefix
-                    </label>
-                  </div>
                   <div class="form-check">
                     <input class="form-check-input" type="checkbox" value="な adjective" id="naAdjectiveFilter">
                     <label class="form-check-label" for="defaultCheck1">
@@ -124,18 +97,47 @@
                     </label>
                   </div>
                   <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="godan verb" id="godanVerbFilter">
+                    <label class="form-check-label" for="defaultCheck1">
+                      godan verb
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="ichidan verb" id="ichidanVerbFilter">
+                    <label class="form-check-label" for="defaultCheck1">
+                      ichidan verb
+                    </label>
+                  </div>
+                  <div class="form-check">
                     <input class="form-check-input" type="checkbox" value="する verb" id="suruVerbFilter">
                     <label class="form-check-label" for="defaultCheck1">
                       する verb
                     </label>
                   </div>
                 </div>
-
                 <div class="col">
                   <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="interjection" id="interjectionFilter">
+                    <input class="form-check-input" type="checkbox" value="intransitive verb" id="intransitiveVerbFilter">
                     <label class="form-check-label" for="defaultCheck1">
-                      interjection
+                      intransitive verb
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="transitive verb" id="transitiveVerbFilter">
+                    <label class="form-check-label" for="defaultCheck1">
+                      transitive verb
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="adverb" id="adverbFilter">
+                    <label class="form-check-label" for="defaultCheck1">
+                      adverb
+                    </label>
+                  </div>
+                  <div class="form-check"> 
+                    <input class="form-check-input" type="checkbox" value="numeral" id="numeralFilter">
+                    <label class="form-check-label" for="defaultCheck1">
+                      numeral
                     </label>
                   </div>
                   <div class="form-check">
@@ -144,10 +146,18 @@
                       counter
                     </label>
                   </div>
+                </div>
+                <div class="col">
                   <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="pronoun" id="pronounCounter">
+                    <input class="form-check-input" type="checkbox" value="prefix" id="prefixFilter">
                     <label class="form-check-label" for="defaultCheck1">
-                      pronoun
+                      prefix
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="suffix" id="suffixFilter">
+                    <label class="form-check-label" for="defaultCheck1">
+                      suffix
                     </label>
                   </div>
                   <div class="form-check">
@@ -156,13 +166,27 @@
                       conjunction
                     </label>
                   </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="interjection" id="interjectionFilter">
+                    <label class="form-check-label" for="defaultCheck1">
+                      interjection
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="expression" id="expressionFilter">
+                    <label class="form-check-label" for="defaultCheck1">
+                      expression
+                    </label>
+                  </div>
                 </div>
-
               </div>
-              <div class="row">
+              <div class="row mt-2">
                 <div class="col text-center mt-2">
                   <input type="button" value="Check/Uncheck All" onclick="toggleCheckboxes()" class="btn btn-primary"></input>
                   <input type="button" value="Filter Results" onclick="processFilters()" class="btn btn-primary"></input>
+                </div>
+                <div class="col text-center mt-2">
+                  <input type="button" value="Export for Flashcards" onclick="download_csv()" class="btn btn-secondary"></input>
                 </div>
               </div>
             </form>
@@ -199,6 +223,7 @@
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
     <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.6.2/js/dataTables.buttons.min.js"></script>
     <script src="./scripts/layout.min.js"></script>
     <script src="./scripts/vocabulary.min.js"></script>
   </body>
