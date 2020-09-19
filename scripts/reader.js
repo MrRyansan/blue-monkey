@@ -190,8 +190,9 @@ function getReadings (readingArray) {
 }
 
 function displaySentencesOnPage(sentences, shouldShuffle, highlightVocab, numberOfSentencesPerParagraph, fontSize){
-  let formattedSentences = getSentencesForDisplay(sentences, highlightVocab);
-  let sentencesToIterate = shouldShuffle ? shuffleArray(formattedSentences) : formattedSentences;
+  let sortedSentences = shouldShuffle ? shuffleArray(sentences) : sentences.sort((a, b) => (a.level > b.level) ? 1 : -1);
+  
+  let sentencesToIterate = getSentencesForDisplay(sortedSentences, highlightVocab);
 
   let mainDiv = $("#mainContent");
 
