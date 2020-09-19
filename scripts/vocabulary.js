@@ -156,7 +156,7 @@ async function getVocabData(apiToken, endLevel) {
       let partsOfSpeech = item.data.parts_of_speech;
 
       vocab.level = item.data.level;
-      vocab.meaning = item.data.meanings[0].meaning;
+      vocab.meaning = getMeanings(item.data.meanings);
       vocab.reading = item.data.readings[0].reading;
       vocab.characters = item.data.characters;
       vocab.partsOfSpeech = partsOfSpeech;
@@ -172,6 +172,14 @@ async function getVocabData(apiToken, endLevel) {
   }
 
   return Promise.resolve(vocabToReturn);
+}
+
+function getMeanings (meaningArray) {
+  let meanings = meaningArray.map(x => {
+    return x.meaning;
+  });
+
+  return meanings.join(", ");
 }
 
 function getLevels(end) {
