@@ -26,9 +26,6 @@ function getHeader() {
           <a class="dropdown-item" href="vocabulary.html">WaniKani Vocabulary<span class="sr-only">(current)</span></a>
         </div>
       </li>
-      <li class="nav-item active">
-        <a class="nav-link" href="about.html">About<span class="sr-only">(current)</span></a>
-      </li>
     </ul>
   </div>
 </nav>`;
@@ -41,6 +38,8 @@ function getFooter() {
         WaniKani is Copyright © <a href="https://www.tofugu.com/" target="_blank">Tofugu LLC</a>
         • 
         Icons made by <a href="https://www.flaticon.com/authors/smashicons" title="Smashicons" target="_blank">Smashicons</a> from <a href="https://www.flaticon.com/" title="Flaticon" target="_blank">www.flaticon.com</a>
+        •
+        <a href="https://community.wanikani.com/t/webapp-wanikani-reader-vocab-reading-practice-with-context-sentences/45301" target="_blank">Contact</a>
       </div>
     </span>
 </div>`;
